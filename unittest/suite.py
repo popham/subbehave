@@ -6,14 +6,16 @@ from behave.configuration import Configuration
 from behave.formatter.base import StreamOpener
 from behave.formatter.formatters import register
 
-from ..command.base import DescribeModel, InjectResource, ScopeTransition
-from ..dispatcher import Dispatcher
 from ..formatter import BlockingFormatter
 from ..runner import ProcessRunner
 from .case import StepTestCase
-from .command import Result
+from .dispatcher import build_dispatcher
+from .command import behave_results
 
-register(BlockingFormatter)
+class UnittestFormatter(BlockingFormatter):
+    results = behave_results.copy()
+
+register(UnittestFormatter)
 
 class Context(object):
     def __init__(self):
@@ -62,13 +64,7 @@ class BehaveSuite(BaseTestSuite):
         self._resources = []
         self._context = Context()
 
-        terminal = lambda c: isinstance(c, ResultCommand)
-        self._dispatcher = Dispatcher(config.command_queue, config.return_queue, terminal)
-
-        d = self._dispatcher
-        d.register(lambda c: isinstance(c, ScopeTransition), self)
-        d.register(lambda c: isinstance(c, Resource), self)
-        d.register(lambda c: isinstance(c, DescribeModel), self._context)
+        self._dispatcher = build_dispatcher(config, self, self._context)
 
     def __repr__(self):
         return '<BehaveSuite>'

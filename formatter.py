@@ -1,17 +1,20 @@
 from behave.formatter.pretty import PrettyFormatter
 
 from .command.describe_model import Feature, Scenario, Step
-from .command.result import *
 
 class BlockingFormatter(PrettyFormatter):
+    """
+    results = map from Behave step outcomes to command.
+
+    """
     name = 'blocking.pretty'
-    description = 'Color formatter that dispatches to a Unittest backend'
+    description = 'Color formatter that fails miserably (replace the results value with a map to backend results).'
     results = {
-        'passed'    : Succeed,
-        'skipped'   : Skip,
-        'failed'    : Fail,
-        'undefined' : Undefined,
-        'untested'  : Untested}
+        'passed'    : None,
+        'skipped'   : None,
+        'failed'    : None,
+        'undefined' : None,
+        'untested'  : None}
 
     def feature(self, feature):
         super().feature(feature)

@@ -4,6 +4,6 @@ from .base import Complete
 from .base import (
     Command,
     DescribeModel,
-    Resource,
+    InjectResource,
     Result,
     ScopeTransition)
