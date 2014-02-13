@@ -1,6 +1,16 @@
 from unittest.runner import TextTestResult
 
 class PyunitResult(TextTestResult):
+
+    """
+    Override the default result type from `unittest` to avoid accessing
+    exceptions.
+
+    An exception's traceback cannot be pickled, so we can't use the `unittest`
+    norm.
+
+    """
+
     def addError(self, test, err):
         self.errors.append((test, err))
         if self.showAll:

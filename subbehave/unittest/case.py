@@ -1,6 +1,12 @@
 from unittest.case import TestCase
 
 class StepTestCase(TestCase):
+
+    """
+    Call a provided command to log test results.
+
+    """
+
     def __init__(self, context, command_caller):
         self.context = context
         self._command_caller = command_caller
