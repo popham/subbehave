@@ -1,9 +1,15 @@
 from behave.runner import Context, Runner
 
-from .command import Complete
+from ..command import Complete
 from .command.scope_transition import Close, Open, Start, Stop
 
 class ProcessContext(Context):
+
+    """
+    Extend Behave's stack handling to send commands to a consumer process.
+
+    """
+
     @property
     def command_queue(self):
         return self.config.command_queue
@@ -29,6 +35,12 @@ class ProcessContext(Context):
         return result
 
 class ProcessRunner(Runner):
+
+    """
+    Override Behave's internal Context handler with `ProcessContext`.
+
+    """
+
     def run_hook(self, name, context, *args):
         if name == 'before_all':
             # Preserve context for calls to replicate the `after_all` hook call
