@@ -19,7 +19,7 @@ class DescribeModel(Command):
     def __call__(self, return_queue, context):
         raise NotImplementedError
 
-class Resource(Command):
+class InjectResource(Command):
     def __call__(self, return_queue, owner):
         raise NotImplementedError
 
