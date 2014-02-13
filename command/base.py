@@ -13,8 +13,17 @@ class Command(object):
     Command protocol interface.
 
     Command instances must also be callable, but the number of arguments can
-    vary with subprotocols. Any data attached to a command instance must be
-    pickleable to allow interprocess transmission.
+    vary with subprotocols. The first argument should always be a `Queue`
+    instance intended for puting return values::
+
+        def __call__(self, return_queue, ...):
+
+    Any data attached to a command instance must be pickleable to allow
+    interprocess transmission::
+        def __init__(self, pickleable1, obj, ...):
+            self.p1 = pickleable1
+            self.p2 = obj.pickleable2
+            ...
 
     A command is initiated with its `trigger` method. This method puts the
     command to a queue for consumption by another process. The method then
@@ -49,15 +58,7 @@ class ScopeTransition(Command):
 
     """
 
-    def __call__(self, return_queue, suite):
-        """
-        Execute the command.
-
-        :param return_queue: `Queue` to receive `Complete` instance upon
-        completion of command handling.
-        :param suite: `BehaveSuite` instance.
-        """
-        raise NotImplementedError
+    pass
 
 class DescribeModel(Command):
 
