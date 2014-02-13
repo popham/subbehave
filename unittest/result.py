@@ -18,7 +18,7 @@ class PyunitResult(TextTestResult):
             self.stream.flush()
 
     def addSkip(self, test, reason):
-        super(TextTestResult, self).addSkip(test, reason)
+        super().addSkip(test, reason)
         if self.showAll:
             self.stream.writeln("skipped {0!r}".format(reason))
         elif self.dots:
