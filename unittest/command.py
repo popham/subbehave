@@ -1,4 +1,36 @@
-from .base import Result, StepModel
+from ..command.base import Command, StepModel
+
+class Result(Command, StepModel):
+
+    """
+    `PyunitResult` protocol interface.
+
+    `PyunitResult` instances describe a step result to a `unittest` consumer.
+
+    """
+
+    def __init__(self, step, capture):
+        """
+        Extend `StepModel` with captured stream data from Behave.
+
+        :param step: `Step` instance from Behave.
+        :param capture: String data captured by Behave's stream capture
+        mechanics.
+        """
+        super().__init__(step)
+        self.capture = capture
+
+    def __call__(self, return_queue, test, pyunit_result):
+        """
+        Execute the command.
+
+        :param return_queue: `Queue` to receive `Complete` instance upon
+        completion of command handling.
+        :param test: `StepTestCase` instance
+        :param pyunit_result: `
+
+        """
+        raise NotImplementedError
 
 class Succeed(Result, StepModel):
     def __call__(self, return_queue, test, pyunit_result):

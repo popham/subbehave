@@ -1,74 +1,19 @@
 from io import BytesIO
 from multiprocessing import Process, Queue
-from unittest.case import TestCase
-from unittest.runner import TextTestResult, TextTestRunner
 from unittest.suite import BaseTestSuite
 
 from behave.configuration import Configuration
-from behave.formatter.formatters import register
 from behave.formatter.base import StreamOpener
+from behave.formatter.formatters import register
 
-from .command.base import DescribeModel, Resource, Result, ScopeTransition
-from .dispatcher import Dispatcher
-from .formatter import BlockingFormatter
-from .runner import ProcessRunner
+from ..command.base import DescribeModel, InjectResource, ScopeTransition
+from ..dispatcher import Dispatcher
+from ..formatter import BlockingFormatter
+from ..runner import ProcessRunner
+from .case import StepTestCase
+from .command import Result
 
 register(BlockingFormatter)
-
-class PyunitResult(TextTestResult):
-    def addError(self, test, err):
-        self.errors.append((test, err))
-        if self.showAll:
-            self.stream.writeln("ERROR")
-        elif self.dots:
-            self.stream.write('E')
-            self.stream.flush()
-
-    def addFailure(self, test, err):
-        self.failures.append((test, err))
-        if self.showAll:
-            self.stream.writeln("FAIL")
-        elif self.dots:
-            self.stream.write('F')
-            self.stream.flush()
-
-    def addSkip(self, test, reason):
-        super(TextTestResult, self).addSkip(test, reason)
-        if self.showAll:
-            self.stream.writeln("skipped {0!r}".format(reason))
-        elif self.dots:
-            self.stream.write("s")
-            self.stream.flush()
-
-    def addExpectedFailure(self, test, err):
-        raise NotImplementedError
-
-    def addUnexpectedSuccess(self, test):
-        raise NotImplementedError
-
-class PyunitRunner(TextTestRunner):
-    resultclass = PyunitResult
-
-class StepTestCase(TestCase):
-    def __init__(self, context, command_caller):
-        self.context = context
-        self._command_caller = command_caller
-
-    def __str__(self):
-        return str(self.context)
-
-    def shortDescription(self):
-        if self.context.step.text:
-            return self.context.step.text.split("\n")[0].strip() or None
-        else:
-            return None
-
-    def run(self, result):
-        result.startTest(self)
-        self._command_caller(self, result)
-        result.stopTest(self)
-
-        return result
 
 class Context(object):
     def __init__(self):
@@ -117,7 +62,7 @@ class BehaveSuite(BaseTestSuite):
         self._resources = []
         self._context = Context()
 
-        terminal = lambda c: isinstance(c, Result)
+        terminal = lambda c: isinstance(c, ResultCommand)
         self._dispatcher = Dispatcher(config.command_queue, config.return_queue, terminal)
 
         d = self._dispatcher
