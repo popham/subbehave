@@ -127,3 +127,23 @@ class StepModel(object):
             self.name,
             self.filename,
             self.line)
+
+class Result(Command):
+
+    """
+    `Result` protocol interface.
+
+    `Result` instances describe a step result to a consumer.
+
+    """
+
+    def __init__(self, step, capture):
+        """
+        Extend `StepModel` with captured stream data from Behave.
+
+        :param step: `Step` instance from Behave.
+        :param capture: String data captured by Behave's stream capture
+        mechanics.
+        """
+        super().__init__(step)
+        self.capture = capture

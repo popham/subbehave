@@ -1,16 +1,17 @@
 import functools
 import itertools
 
+from .command.base import Result
 class UnhandledCommand(TypeError):
     def __init__(self, command):
         msg = 'Cannot handle command. Provided: %s'
         super().__init__(msg % command.__class__)
 
 class Dispatcher(object):
-    def __init__(self, command_queue, return_queue, terminal):
+    def __init__(self, command_queue, return_queue):
         self.__command_queue = command_queue
         self.__return_queue = return_queue
-        self.__terminal = terminal
+        self.__terminal = lambda c: isinstance(c, Result)
         self.__handlers = [[]]
 
     def register(self, matcher, arg):
