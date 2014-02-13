@@ -1,6 +1,6 @@
 from .base import Complete
 
-# Command Protocols
+# Collect all of the Command protocols
 from .base import (
     Command,
     DescribeModel,
