@@ -13,11 +13,11 @@ A Django-testing consumer, `Djbehave <https://github.com/popham/djbehave>`_, was
 setup(
     name="subbehave",
     description="Provide Behave step outcomes for consumption by another process.",
-    version="v%s" % version,
+    version="%s" % version,
     author="Tim Popham",
     author_email="popham@uw.edu",
     url="https://github.com/popham/subbehave",
-    download_url="https://github.com/popham/subbehave/archive/v%s.tar.gz" % version,
+    download_url="https://github.com/popham/subbehave/archive/%s.tar.gz" % version,
     packages=find_packages('.', exclude=()),
     install_requires=[
         'django>=1.4.1',
